@@ -5,10 +5,25 @@
   tasks:
 
   - name: update repository index
-    dnf:
+    package:
       update_cache: yes
 
-  - name: install apache2 package
-    dnf:
+  - name: install httpd package
+    package:
       name: httpd
       state: latest
+    when: ansible_distribution == "RedHat"
+
+  - name: install apache2 package
+    apt:
+      name: apache2
+      state: latest
+    when: ansible_distribution in ["Debian","Ubuntu"]
+
+  - name: install htop package
+    package:
+      name: htop
+      state: latest
+    when: ansible_distribution == "CentOS" and ansible_distribution_version == "8.2"
+
+
