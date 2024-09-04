@@ -4,26 +4,10 @@
   become: true
   tasks:
 
-  - name: update repository index
-    package:
-      update_cache: yes
-
-  - name: install httpd package
-    package:
-      name: httpd
-      state: latest
-    when: ansible_distribution == "RedHat"
-
-  - name: install apache2 package
-    apt:
-      name: apache2
-      state: latest
-    when: ansible_distribution in ["Debian","Ubuntu"]
-
-  - name: install htop package
-    package:
-      name: htop
-      state: latest
-    when: ansible_distribution == "CentOS" and ansible_distribution_version == "8.2"
-
-
+    - name: install apache,htop and update repository index
+      package:
+        name:
+          - "{{ apache_package }}"
+          - htop
+        state: latest
+        update_cache: true
