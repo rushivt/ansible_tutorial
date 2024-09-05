@@ -2,7 +2,7 @@
 
 - hosts: all
   become: true
-  tasks:
+  pre_tasks:
     
     - name: update packages and repo index
       dnf:
