@@ -43,3 +43,26 @@
         group: root
         mode: 0644
       when: ansible_distribution == "RedHat"
+
+
+- hosts: web_servers
+  become: true
+  tasks:
+
+    - name: installing unzip
+      tags: unzip
+      package:
+        name: unzip
+        state: latest
+
+
+    - name: installing terraform
+      tags: terraform
+      unarchive:
+        src: https://releases.hashicorp.com/terraform/1.9.5/terraform_1.9.5_linux_arm64.zip
+        dest: /usr/local/bin
+        remote_src: yes
+        owner: root
+        group: root
+        mode: 0755
+
