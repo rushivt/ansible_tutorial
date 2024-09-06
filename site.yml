@@ -34,6 +34,30 @@
         state: latest
       when: ansible_distribution == "RedHat"
 
+    - name: start and enable httpd
+      tags: httpd,apache,redhat
+      service:
+        name: httpd
+        state: started
+        enabled: yes
+      when: ansible_distribution == "RedHat"
+
+    - name: edit the mail id of server admin
+      tags: apache,httpd,apache2
+      lineinfile:
+        path: /etc/httpd/conf/httpd.conf
+        regexp: '^ServerAdmin'
+        line: ServerAdmin rushi.vt@gmail.com
+      when: ansible_distribution == "RedHat"
+      register: httpd
+
+    - name: restart HTTPD
+      tags: httpd,apache,redhat
+      service:
+        name: httpd
+        state: restarted
+      when: httpd.changed
+
     - name: copy webpage from host to guest
       tags: apache,httpd,apache2
       copy:
