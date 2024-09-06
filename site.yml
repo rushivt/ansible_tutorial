@@ -5,6 +5,7 @@
   pre_tasks:
     
     - name: update packages and repo index
+      tags: always
       dnf:
         update_only: yes
         update_cache: yes
@@ -16,6 +17,7 @@
   tasks:
 
     - name: install apache2,htop and update repository indexes
+      tags: apache,apache2,ubuntu
       apt:
         name:
           - apache2
@@ -24,9 +26,20 @@
       when: ansible_distribution == "Ubuntu"
 
     - name: install httpd,htop and update repository indexes
+      tags: httpd,redhat
       dnf:
         name:
           - httpd
           - htop
         state: latest
+      when: ansible_distribution == "RedHat"
+
+    - name: copy webpage from host to guest
+      tags: apache,httpd,apache2
+      copy:
+        src: default_site.html
+        dest: /var/www/html/index.html
+        owner: root
+        group: root
+        mode: 0644
       when: ansible_distribution == "RedHat"
